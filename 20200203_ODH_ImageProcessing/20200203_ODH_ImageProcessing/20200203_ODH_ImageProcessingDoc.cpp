@@ -14,6 +14,8 @@
 #include "CDownSampleDlg1.h"
 #include "CUpSampleDlg.h"
 #include "CQuantizationDlg.h"
+#include "CConstantDlg.h"
+#include "CStressTransformDlg.h"
 
 #include <propkey.h>
 
@@ -226,11 +228,16 @@ void CMy20200203ODHImageProcessingDoc::OnDownSampling()
 
 		m_OutputImage = new unsigned char[m_Re_size];
 		// 축소 영상을 위한 메모리 할당
+		for (i = 0; i < m_Re_size; i++)
+		{
+			m_OutputImage[i] = 255;
+		}
 
-		for (i = 0; i < m_Re_height; i++) {
-			for (j = 0; j < m_Re_width; j++) {
-				m_OutputImage[i*m_Re_width + j]
-					= m_InputImage[(i*dlg.m_DownSampleRate*m_width) + dlg.m_DownSampleRate*j];
+		for (i = 0; i < m_Re_height; i++)
+		{
+			for (j = 0; j < m_Re_width; j++) 
+			{
+				m_OutputImage[i*m_Re_width + j]= m_InputImage[(i*dlg.m_DownSampleRate*m_width) + dlg.m_DownSampleRate*j];
 				// 축소 영상을 생성
 			}
 		}
@@ -259,8 +266,7 @@ void CMy20200203ODHImageProcessingDoc::OnUpSampling()
 
 		for (i = 0; i < m_height; i++) {
 			for (j = 0; j < m_width; j++) {
-				m_OutputImage[i*dlg.m_UpSampleRate*m_Re_width +
-					dlg.m_UpSampleRate*j] = m_InputImage[i*m_width + j];
+				m_OutputImage[i*dlg.m_UpSampleRate*m_Re_width + dlg.m_UpSampleRate*j] = m_InputImage[i*m_width + j];
 			} // 재배치하여 영상 확대
 		}
 	}
@@ -289,17 +295,18 @@ void CMy20200203ODHImageProcessingDoc::OnQuantization()
 		TEMP = new double[m_size];
 		//입력 영상 크기(m_size)와 동일한 메모리 할당
 
-		LEVEL = 256; //입력 영상의 양자와 단계(28=256)
+		LEVEL = 256; //입력 영상의 양자와 단계(2^8=256)
 		HIGH = 256;
 
 		value = (int)pow(2, dlg.m_QuantBit);
-		//양자화 단계 결정(예 : 24=16)
+		//양자화 단계 결정(예 : 2^4=16)
 
 		for (i = 0; i < m_size; i++) {
 			for (j = 0; j < value; j++) {
 				if (m_InputImage[i] >= (LEVEL / value)*j &&
 					m_InputImage[i] < (LEVEL / value)*(j + 1)) {
-					TEMP[i] = (double)(HIGH / value) *j;//양자화 수행
+					TEMP[i] = (double)(HIGH / value) *j; //양자화 수행
+					//TEMP[i] += 0.5;
 				}
 			}
 		}
@@ -310,4 +317,369 @@ void CMy20200203ODHImageProcessingDoc::OnQuantization()
 			//결과 영상 생성
 		}
 	}
+}
+
+
+void CMy20200203ODHImageProcessingDoc::OnSumConstant()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantDlg dlg;
+
+	int i;
+
+	m_Re_height = m_height;
+	m_Re_width = m_width;
+	m_Re_size = m_Re_height * m_Re_width;
+
+	m_OutputImage = new unsigned char[m_Re_size];
+
+	if (dlg.DoModal() == IDOK)
+	{
+		for (i = 0; i < m_size; i++)
+		{
+			if (m_InputImage[i] + dlg.m_Constant >= 255)
+			{
+				m_OutputImage[i] = 255;
+				//출력값이 255보다 크면 255출력
+			}
+			else
+			{
+				m_OutputImage[i] = (unsigned char)(m_InputImage[i] + dlg.m_Constant);
+				//상수 값과 화소 값과의 덧셈
+			}
+		}
+	}
+
+
+
+}
+
+
+void CMy20200203ODHImageProcessingDoc::OnSubConstant()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantDlg dlg;
+
+	int i;
+
+	m_Re_height = m_height;
+	m_Re_width = m_width;
+	m_Re_size = m_Re_height * m_Re_width;
+
+	m_OutputImage = new unsigned char[m_Re_size];
+
+	if (dlg.DoModal() == IDOK)
+	{
+		for (i = 0; i < m_size; i++)
+		{
+			
+			if (m_InputImage[i] - dlg.m_Constant < 0)
+			{
+				m_OutputImage[i] = 0;
+				//0보다 작으면 0 출력
+			}
+			else
+			{
+				m_OutputImage[i] = (unsigned char)(m_InputImage[i] - dlg.m_Constant);
+				//상수 값과 화소 값과의 뺄셈
+			}
+		}
+	}
+}
+
+
+void CMy20200203ODHImageProcessingDoc::OnMulConstant()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantDlg dlg;
+
+	int i;
+
+	m_Re_height = m_height;
+	m_Re_width = m_width;
+	m_Re_size = m_Re_height * m_Re_width;
+
+	m_OutputImage = new unsigned char[m_Re_size];
+
+	if (dlg.DoModal() == IDOK)
+	{
+		for (i = 0; i < m_size; i++)
+		{
+
+			if (m_InputImage[i] * dlg.m_Constant >= 255)
+			{
+				m_OutputImage[i] = 255;
+				//255보다 크면 255 출력
+			}
+			else if (m_InputImage[i] * dlg.m_Constant < 0)
+			{
+				m_OutputImage[i] = 0;
+				//0보다 작으면 0 출력
+			}
+			else
+			{
+				m_OutputImage[i] = (unsigned char)(m_InputImage[i] * dlg.m_Constant);
+				//상수 값과 화소 값과의 곱셈
+			}
+		}
+	}
+}
+
+
+void CMy20200203ODHImageProcessingDoc::OnDivConstant()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantDlg dlg;
+
+	int i;
+
+	m_Re_height = m_height;
+	m_Re_width = m_width;
+	m_Re_size = m_Re_height * m_Re_width;
+
+	m_OutputImage = new unsigned char[m_Re_size];
+
+	if (dlg.DoModal() == IDOK)
+	{
+		for (i = 0; i < m_size; i++)
+		{
+
+			if (m_InputImage[i] / dlg.m_Constant >= 255)
+			{
+				m_OutputImage[i] = 255;
+				//255보다 크면 255 출력
+			}
+			else if (m_InputImage[i] / dlg.m_Constant < 0)
+			{
+				m_OutputImage[i] = 0;
+				//0보다 작으면 0 출력
+			}
+			else
+			{
+				m_OutputImage[i] = (unsigned char)(m_InputImage[i] / dlg.m_Constant);
+				//상수 값과 화소 값과의 곱셈
+			}
+		}
+	}
+}
+
+
+void CMy20200203ODHImageProcessingDoc::OnAndOperate()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantDlg dlg;
+	int i;
+
+	m_Re_height = m_height;
+	m_Re_width = m_width;
+	m_Re_size = m_Re_height * m_Re_width;
+
+	m_OutputImage = new unsigned char[m_Re_size];
+
+	if (dlg.DoModal() == IDOK)
+	{
+		for (i = 0; i <= m_Re_size; i++)
+		{
+			if ((m_InputImage[i] & (unsigned char)dlg.m_Constant) >= 255)
+			{
+				m_OutputImage[i] = 255;
+			}
+			else if ((m_InputImage[i] & (unsigned char)dlg.m_Constant) <0)
+			{
+				m_OutputImage[i] = 0;
+			}
+			else
+			{
+				m_OutputImage[i] = m_InputImage[i] & (unsigned char)dlg.m_Constant;
+			}
+		}
+	}
+
+
+}
+
+
+void CMy20200203ODHImageProcessingDoc::OnOrOperate()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantDlg dlg;
+	int i;
+	
+	m_Re_height = m_height;
+	m_Re_width = m_width;
+	m_Re_size = m_Re_width * m_Re_height;
+
+	m_OutputImage = new unsigned char[m_Re_size];
+
+	if (dlg.DoModal() == IDOK)
+	{
+		for (i = 0; i < m_Re_size; i++)
+		{
+			if ((m_InputImage[i] | (unsigned char)dlg.m_Constant) >= 255)
+			{
+				m_OutputImage[i] = 255;
+			}
+			else if ((m_InputImage[i] | (unsigned char)dlg.m_Constant) < 0)
+			{
+				m_OutputImage[i] = 0;
+			}
+			else
+			{
+				m_OutputImage[i] = m_InputImage[i] | (unsigned char)dlg.m_Constant;
+			}
+
+		}
+	}
+}
+
+
+void CMy20200203ODHImageProcessingDoc::OnXorOperate()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantDlg dlg;
+	int i;
+
+	m_Re_height = m_height;
+	m_Re_width = m_width;
+	m_Re_size = m_Re_width * m_Re_height;
+
+	m_OutputImage = new unsigned char[m_Re_size];
+
+	if (dlg.DoModal() == IDOK)
+	{
+		for (i = 0; i < m_Re_size; i++)
+		{
+			if ((m_InputImage[i] ^ (unsigned char)dlg.m_Constant) >= 255)
+			{
+				m_OutputImage[i] = 255;
+			}
+			else if ((m_InputImage[i] ^ (unsigned char)dlg.m_Constant) < 0)
+			{
+				m_OutputImage[i] = 0;
+			}
+			else
+			{
+				m_OutputImage[i] = m_InputImage[i] ^ (unsigned char)dlg.m_Constant;
+			}
+
+		}
+	}
+}
+
+
+void CMy20200203ODHImageProcessingDoc::OnNegaTransform()
+{
+	// TODO: 여기에 구현 코드 추가.
+	int i;
+
+	m_Re_height = m_height;
+	m_Re_width = m_width;
+	m_Re_size = m_Re_width * m_Re_height;
+
+	m_OutputImage = new unsigned char[m_Re_size];
+
+	for (i = 0; i < m_size; i++)
+	{
+		m_OutputImage[i] = 255 - m_InputImage[i];
+	}
+}
+
+
+void CMy20200203ODHImageProcessingDoc::OnGammaCorrection()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantDlg dlg;
+	int i;
+	double temp;
+
+	m_Re_height = m_height;
+	m_Re_width = m_width;
+	m_Re_size = m_Re_width * m_Re_height;
+
+	m_OutputImage = new unsigned char[m_Re_size];
+
+	if (dlg.DoModal() == IDOK)
+	{
+		for(i =0 ; i<m_size ; i++)
+		{
+			temp = pow(m_InputImage[i], 1 / dlg.m_Constant);
+			 
+			if (temp < 0)
+			{
+				m_OutputImage[i] = 0;
+			}
+			else if (temp > 255)
+			{
+				m_OutputImage[i] = 255;
+			}
+			else
+			{
+				m_OutputImage[i] = (unsigned char)temp;
+			}
+		}
+	}
+
+}
+
+
+void CMy20200203ODHImageProcessingDoc::OnBinarzation()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantDlg dlg;
+	int i;
+	double temp;
+
+	m_Re_height = m_height;
+	m_Re_width = m_width;
+	m_Re_size = m_Re_width * m_Re_height;
+
+	m_OutputImage = new unsigned char[m_Re_size];
+	if (dlg.DoModal() == IDOK)
+	{
+		for (i = 0; i < m_size; i++)
+		{
+			if (m_InputImage[i] >= dlg.m_Constant)
+			{
+				m_OutputImage[i] = 255;
+			}
+			else
+			{
+				m_OutputImage[i] = 0;
+			}
+		}
+	}
+}
+
+
+void CMy20200203ODHImageProcessingDoc::OnStressTransform()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CStressTransformDlg dlg;
+	int i;
+	double temp;
+
+	m_Re_height = m_height;
+	m_Re_width = m_width;
+	m_Re_size = m_Re_width * m_Re_height;
+
+	m_OutputImage = new unsigned char[m_Re_size];
+
+	if (dlg.DoModal() == IDOK)
+	{
+		for (i = 0; i < m_size; i++)
+		{
+			if (m_InputImage[i] >= dlg.m_StrartPoint && 
+				m_InputImage[i] <= dlg.m_EndPoint)
+			{
+				m_OutputImage[i] = 255;
+			}
+			else
+			{
+				m_OutputImage[i] = m_InputImage[i];
+			}
+		}
+	}
+
+	
+
 }

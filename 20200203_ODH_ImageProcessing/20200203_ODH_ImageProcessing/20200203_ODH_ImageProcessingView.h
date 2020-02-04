@@ -45,6 +45,17 @@ public:
 	afx_msg void OnDownSampling();
 	afx_msg void OnUpSample();
 	afx_msg void OnQuantization();
+	afx_msg void OnSumConstant();
+	afx_msg void OnSubConstant();
+	afx_msg void OnMulConstant();
+	afx_msg void OnDivConstant();
+	afx_msg void OnAndOperate();
+	afx_msg void OnOrOperate();
+	afx_msg void OnXorOperate();
+	afx_msg void OnNegaTransform();
+	afx_msg void OnGammaCorrection();
+	afx_msg void OnBinarzation();
+	afx_msg void OnStressTransform();
 };
 
 #ifndef _DEBUG  // 20200203_ODH_ImageProcessingView.cpp의 디버그 버전

@@ -31,6 +31,17 @@ BEGIN_MESSAGE_MAP(CMy20200203ODHImageProcessingView, CView)
 ON_COMMAND(ID_DOWN_SAMPLING, &CMy20200203ODHImageProcessingView::OnDownSampling)
 ON_COMMAND(ID_UP_SAMPLE, &CMy20200203ODHImageProcessingView::OnUpSample)
 ON_COMMAND(ID_QUANTIZATION, &CMy20200203ODHImageProcessingView::OnQuantization)
+ON_COMMAND(ID_SUM_CONSTANT, &CMy20200203ODHImageProcessingView::OnSumConstant)
+ON_COMMAND(ID_SUB_CONSTANT, &CMy20200203ODHImageProcessingView::OnSubConstant)
+ON_COMMAND(ID_MUL_CONSTANT, &CMy20200203ODHImageProcessingView::OnMulConstant)
+ON_COMMAND(ID_DIV_CONSTANT, &CMy20200203ODHImageProcessingView::OnDivConstant)
+ON_COMMAND(ID_AND_OPERATE, &CMy20200203ODHImageProcessingView::OnAndOperate)
+ON_COMMAND(ID_OR_OPERATE, &CMy20200203ODHImageProcessingView::OnOrOperate)
+ON_COMMAND(ID_XOR_OPERATE, &CMy20200203ODHImageProcessingView::OnXorOperate)
+ON_COMMAND(ID_NEGA_TRANSFORM, &CMy20200203ODHImageProcessingView::OnNegaTransform)
+ON_COMMAND(ID_GAMMA_CORRECTION, &CMy20200203ODHImageProcessingView::OnGammaCorrection)
+ON_COMMAND(ID_BINARZATION, &CMy20200203ODHImageProcessingView::OnBinarzation)
+ON_COMMAND(ID_STRESS_TRANSFORM, &CMy20200203ODHImageProcessingView::OnStressTransform)
 END_MESSAGE_MAP()
 
 // CMy20200203ODHImageProcessingView 생성/소멸
@@ -69,7 +80,8 @@ void CMy20200203ODHImageProcessingView::OnDraw(CDC* pDC)
 
 	for (i = 0; i < pDoc->m_height; i++) {
 		for (j = 0; j < pDoc->m_width; j++) {
-			R = G = B = pDoc->m_InputImage[i*pDoc->m_width + j];
+			R = pDoc->m_InputImage[i*pDoc->m_width + j];
+			G = B =R;
 			pDC->SetPixel(j + 5, i + 5, RGB(R, G, B));
 		}
 	}
@@ -160,5 +172,126 @@ void CMy20200203ODHImageProcessingView::OnQuantization()
 
 	pDoc->OnQuantization(); //Doc 클래스에  OnUpSampling 함수 호출
 
+	Invalidate(TRUE);
+}
+
+
+void CMy20200203ODHImageProcessingView::OnSumConstant()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CMy20200203ODHImageProcessingDoc* pDoc = GetDocument();
+	pDoc->OnSumConstant();
+	Invalidate(TRUE);
+
+}
+
+
+void CMy20200203ODHImageProcessingView::OnSubConstant()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CMy20200203ODHImageProcessingDoc* pDoc = GetDocument();
+	pDoc->OnSubConstant();
+	Invalidate(TRUE);
+}
+
+
+void CMy20200203ODHImageProcessingView::OnMulConstant()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CMy20200203ODHImageProcessingDoc* pDoc = GetDocument();
+	pDoc->OnMulConstant();
+	Invalidate(TRUE);
+}
+
+
+void CMy20200203ODHImageProcessingView::OnDivConstant()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CMy20200203ODHImageProcessingDoc* pDoc = GetDocument();
+	pDoc->OnDivConstant();
+	Invalidate(TRUE);
+}
+
+
+void CMy20200203ODHImageProcessingView::OnAndOperate()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CMy20200203ODHImageProcessingDoc* pDoc = GetDocument(); //Doc클래스 참조
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnAndOperate(); //Doc 클래스에  OnUpSampling 함수 호출
+
+	Invalidate(TRUE);
+}
+
+
+void CMy20200203ODHImageProcessingView::OnOrOperate()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CMy20200203ODHImageProcessingDoc* pDoc = GetDocument();
+
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnOrOperate();
+	Invalidate(TRUE);
+}
+
+
+void CMy20200203ODHImageProcessingView::OnXorOperate()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CMy20200203ODHImageProcessingDoc* pDoc = GetDocument();
+
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnXorOperate();
+	Invalidate(TRUE);
+}
+
+
+void CMy20200203ODHImageProcessingView::OnNegaTransform()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CMy20200203ODHImageProcessingDoc* pDoc = GetDocument();
+
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnNegaTransform();
+	Invalidate(TRUE);
+}
+
+
+void CMy20200203ODHImageProcessingView::OnGammaCorrection()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CMy20200203ODHImageProcessingDoc* pDoc = GetDocument();
+
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnGammaCorrection();
+	Invalidate(TRUE);
+}
+
+
+void CMy20200203ODHImageProcessingView::OnBinarzation()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CMy20200203ODHImageProcessingDoc* pDoc = GetDocument();
+
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnBinarzation();
+	Invalidate(TRUE);
+}
+
+
+void CMy20200203ODHImageProcessingView::OnStressTransform()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CMy20200203ODHImageProcessingDoc* pDoc = GetDocument();
+
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnStressTransform();
 	Invalidate(TRUE);
 }
