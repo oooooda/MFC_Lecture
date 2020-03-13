@@ -56,6 +56,35 @@ public:
 	afx_msg void OnGammaCorrection();
 	afx_msg void OnBinarzation();
 	afx_msg void OnStressTransform();
+	afx_msg void OnHistoStretch();
+	afx_msg void OnHistogram();
+	afx_msg void OnEndInSearch();
+	afx_msg void OnHistoEqual();
+	afx_msg void OnHistoSpec();
+	afx_msg void OnEmbossing();
+	afx_msg void OnBlurr();
+	afx_msg void OnGaussianFilter();
+	afx_msg void OnSharpening();
+	afx_msg void OnHpfSharp();
+	afx_msg void OnLpfSharp();
+	afx_msg void On5x5Buurr();
+	afx_msg void OnDiffOperatorHor();
+	afx_msg void OnDiffOperatorVer();
+	afx_msg void OnHomogenOperator();
+	afx_msg void OnDifferenceOperator();
+	afx_msg void OnRobertsRow();
+	afx_msg void OnRpbertsColumn();
+	afx_msg void OnRobertsSynthesis();
+	afx_msg void OnSobelRow();
+	afx_msg void OnSobelColumn();
+	afx_msg void OnSobelSynthesis();
+	afx_msg void OnPrewittRow();
+	afx_msg void OnPrewittColumn();
+	afx_msg void OnPrewittSynthesis();
+	afx_msg void OnLaplacian();
+	afx_msg void OnLaplacianOfGaussian();
+	afx_msg void OnNearest();
+	afx_msg void OnBilinear();
 };
 
 #ifndef _DEBUG  // 20200203_ODH_ImageProcessingView.cpp의 디버그 버전

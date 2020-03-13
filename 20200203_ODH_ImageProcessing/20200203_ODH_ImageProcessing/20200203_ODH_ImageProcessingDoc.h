@@ -75,4 +75,49 @@ public:
 	void OnGammaCorrection();
 	void OnBinarzation();
 	void OnStressTransform();
+	void OnHistoStretch();
+	void OnHistogram();
+	//히스토 그램
+	double m_HIST[256];
+	double m_Sum_Of_HIST[256];
+	unsigned char m_Scale_HIST[256];
+	void OnEndInSearch();
+	void OnHistoEqual();
+	void OnHistoSpec();
+	void OnEmbossing();
+	//화소 영역을 처리하는 함수
+	double ** OnMaskProcess(unsigned char * Target, double Mask[3][3]);
+	double ** OnMaskProcess01(unsigned char * Target, double Mask01[3][3], double Mask02[3][3]);
+	double ** On5X5MaskProcess(unsigned char * Target, double Mask[5][5]);
+	//영상의 화소 값을 정규화시키는 함수
+	double** OnScale(double **Target, int height, int width);
+	//화소 영역 처리 프로그램을 간단히 하겨고 1차월 배열을 2차원 배열로 할당하는 함수
+	double ** Image2DMem(int height, int width);
+	double** m_tempImage;
+	double** m_tempImage1;
+	
+	void OnBlurr();
+	void OnGaussianFilter();
+	void OnSharpening();
+	void OnHpfSharp();
+	void OnLpfSharp();
+	void On5x5Buurr();
+	void OnDiffOperatorHor();
+	void OnDiffOperatorVer();
+	void OnHomogenOperator();
+	double DoubleABS(double X);
+	void OnDifferenceOperator();
+	void OnRobertsRow();
+	void OnRpbertsColumn();
+	void OnRobertsSynthesis();
+	void OnSobelRow();
+	void OnSobelColumn();
+	void OnSobelSynthesis();
+	void OnPrewittRow();
+	void OnPrewittColumn();
+	void OnPrewittSynthesis();
+	void OnLaplacian();
+	void OnLaplacianOfGaussian();
+	void OnNearest();
+	void OnBilinear();
 };

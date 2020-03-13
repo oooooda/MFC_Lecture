@@ -60,6 +60,9 @@
     <ClInclude Include="CStressTransformDlg.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="CZoomRate.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="20200203_ODH_ImageProcessing.cpp">
@@ -96,6 +99,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CStressTransformDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CZoomRate.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
